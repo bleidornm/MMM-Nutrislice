@@ -50,17 +50,31 @@ Module.register("MMM-Nutrislice", {
     getDom: function() {
         const wrapper = document.createElement("div");
 
+        const header = document.createElement("header");
+        header.className = "module-header";
+        header.innerHTML = "Today's School Menu";
+        wrapper.appendChild(header);
+
         if (!this.menuData) {
-            wrapper.innerHTML = "Loading menu data...";
+            const loadingElement = document.createElement("div");
+            loadingElement.innerHTML = "Loading menu data...";
+            wrapper.appendChild(loadingElement);
             return wrapper;
         }
 
-        this.menuData.forEach((menu) => {
+        const today = new Date().toISOString().split('T')[0];
+        const menu = this.menuData.find(menu => menu.date === today);
+
+        if (menu) {
             const dateElement = document.createElement("div");
             dateElement.className = "menu-date";
             dateElement.innerHTML = `<strong>${menu.date}</strong>: ${menu.combinedMenu}`;
             wrapper.appendChild(dateElement);
-        });
+        } else {
+            const noMenuElement = document.createElement("div");
+            noMenuElement.innerHTML = "No menu available for today.";
+            wrapper.appendChild(noMenuElement);
+        }
 
         return wrapper;
     }
