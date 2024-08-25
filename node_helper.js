@@ -1,5 +1,5 @@
 const NodeHelper = require("node_helper");
-const fetch = require("node-fetch");
+const https = require("https");
 
 module.exports = NodeHelper.create({
     start: function() {
@@ -12,23 +12,42 @@ module.exports = NodeHelper.create({
         }
     },
 
-    async getMenuData(breakfastUrl, lunchUrl) {
-        try {
-            const breakfastResponse = await fetch(breakfastUrl);
-            const lunchResponse = await fetch(lunchUrl);
+    getMenuData: function(breakfastUrl, lunchUrl) {
+        const self = this;
 
-            const breakfastData = await breakfastResponse.json();
-            const lunchData = await lunchResponse.json();
-
-            const combinedMenus = this.combineMenus(breakfastData, lunchData);
-
-            this.sendSocketNotification("MENU_DATA", combinedMenus);
-        } catch (error) {
-            console.error("Error fetching menu data:", error);
-        }
+        this.fetchData(breakfastUrl, (breakfastData) => {
+            this.fetchData(lunchUrl, (lunchData) => {
+                const combinedMenus = self.combineMenus(breakfastData, lunchData);
+                self.sendSocketNotification("MENU_DATA", combinedMenus);
+            });
+        });
     },
 
-    combineMenus(breakfastData, lunchData) {
+    fetchData: function(url, callback) {
+        https.get(url, (resp) => {
+            let data = '';
+
+            // A chunk of data has been received.
+            resp.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            // The whole response has been received. Parse and send callback.
+            resp.on('end', () => {
+                try {
+                    const parsedData = JSON.parse(data);
+                    callback(parsedData);
+                } catch (error) {
+                    console.error("Error parsing JSON:", error);
+                }
+            });
+
+        }).on("error", (err) => {
+            console.error("Error fetching data:", err);
+        });
+    },
+
+    combineMenus: function(breakfastData, lunchData) {
         const combinedMenus = [];
 
         const breakfastItems = this.parseMenuItems(breakfastData);
@@ -49,7 +68,7 @@ module.exports = NodeHelper.create({
         return combinedMenus;
     },
 
-    parseMenuItems(menuData) {
+    parseMenuItems: function(menuData) {
         const parsedItems = {};
 
         menuData.days.forEach(day => {
