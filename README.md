@@ -24,3 +24,9 @@ To use, add a block to `config.js` that looks like the following:
 }
 
 ```
+
+## Features to add
+
+- Move from a day with both breakfast and lunch in one line to split breakfast and lunch apart into two bullets under "Today's Menu"
+- Limit out to or highlight entries with `"food_category": "entree"` 
+- Configure multiple days or next n days of entry
