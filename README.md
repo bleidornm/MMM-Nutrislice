@@ -12,15 +12,15 @@ This API does not require a key. Accesses should be kept to a minimum period (da
 
 To use, add a block to `config.js` that looks like the following:
 
-```json
+```javascript
 {
     module: "MMM-Nutrislice",
-    position: "top_left", // Choose the position where you want to display the menu
+    position: "top_left",
     config: {
-        // Optionally override the default URLs and update interval here
-        breakfastUrl: "https://soudertonsd.api.nutrislice.com/menu/api/weeks/school/salford-hills-elementary-school/menu-type/breakfast/2024/08/27/",
-        lunchUrl: "https://soudertonsd.api.nutrislice.com/menu/api/weeks/school/salford-hills-elementary-school/menu-type/lunch/2024/08/27/",
+        district: "soudertonsd", // Your district here
+        schoolName: "salford-hills-elementary-school", // Your school name here
         updateInterval: 3600000 // 1 hour
     }
 }
+
 ```

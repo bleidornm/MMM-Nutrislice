@@ -1,8 +1,8 @@
 Module.register("MMM-Nutrislice", {
     // Default module config.
     defaults: {
-        breakfastUrl: "https://soudertonsd.api.nutrislice.com/menu/api/weeks/school/salford-hills-elementary-school/menu-type/breakfast/2024/08/27/",
-        lunchUrl: "https://soudertonsd.api.nutrislice.com/menu/api/weeks/school/salford-hills-elementary-school/menu-type/lunch/2024/08/27/",
+        district: "soudertonsd",
+        schoolName: "salford-hills-elementary-school",
         updateInterval: 3600000, // 1 hour
     },
 
@@ -19,10 +19,25 @@ Module.register("MMM-Nutrislice", {
     },
 
     getMenuData: function() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+
+        const breakfastUrl = this.buildUrl("breakfast", year, month, day);
+        const lunchUrl = this.buildUrl("lunch", year, month, day);
+
         this.sendSocketNotification("GET_MENU_DATA", {
-            breakfastUrl: this.config.breakfastUrl,
-            lunchUrl: this.config.lunchUrl
+            breakfastUrl: breakfastUrl,
+            lunchUrl: lunchUrl
         });
+    },
+
+    buildUrl: function(menuType, year, month, day) {
+        const district = this.config.district;
+        const schoolName = this.config.schoolName;
+
+        return `https://${district}.api.nutrislice.com/menu/api/weeks/school/${schoolName}/menu-type/${menuType}/${year}/${month}/${day}/`;
     },
 
     socketNotificationReceived: function(notification, payload) {
