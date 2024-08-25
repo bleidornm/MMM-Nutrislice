@@ -49,6 +49,8 @@ Module.register("MMM-Nutrislice", {
 
     getDom: function() {
         const wrapper = document.createElement("div");
+        wrapper.className = "MMM-Nutrislice"; // Add this class to apply the CSS
+    
 
         const header = document.createElement("header");
         header.className = "module-header";

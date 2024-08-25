@@ -24,6 +24,7 @@ module.exports = NodeHelper.create({
     },
 
     fetchData: function(url, callback) {
+        console.log("Fetching from URL:", url)
         https.get(url, (resp) => {
             let data = '';
 
