@@ -2,7 +2,9 @@
 
 This module downloads menus from a specific district, school, and daily menu from the Nutrislice.com menu provider and displays it on the screen.
 
-Background information on the app can be found [at this tutorial](https://vees.net/).
+Background information on the app can be found [at this tutorial](https://vees.net/hobbies/selfhosted/magicmirror/nutrislice/).
+
+![MagicMirror is a popular smart mirror platform that displays various information such as time, date, weather, and custom modules. This screenshot effectively showcases the integration of different modules in a MagicMirror setup, including a custom module for displaying school menus alongside standard time and weather modules.](magicmirror-nutrislice-ss.png)
 
 Operation depends on the external API located at:
 
@@ -22,7 +24,6 @@ To use, add a block to `config.js` that looks like the following:
         updateInterval: 3600000 // 1 hour
     }
 }
-
 ```
 
 ## Features to add
