@@ -62,7 +62,7 @@ module.exports = NodeHelper.create({
 
             combinedMenus.push({
                 date: date,
-                combinedMenu: `Breakfast: ${breakfast}, Lunch: ${lunch}`
+                combinedMenu: `<strong>Breakfast</strong>: ${breakfast}, <strong>Lunch</strong>: ${lunch}`
             });
         });
 
@@ -74,7 +74,10 @@ module.exports = NodeHelper.create({
 
         menuData.days.forEach(day => {
             const date = day.date;
-            const items = day.menu_items.map(item => item.food?.name).filter(Boolean);
+            const items = day.menu_items.
+				filter(item => item.food?.food_category == "entree").
+				map(item => item.food?.name).
+				filter(Boolean); // concise way to remove "falsy" values
             parsedItems[date] = items;
         });
 

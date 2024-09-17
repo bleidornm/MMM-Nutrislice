@@ -50,7 +50,7 @@ Module.register("MMM-Nutrislice", {
     getDom: function() {
         const wrapper = document.createElement("div");
         wrapper.className = "MMM-Nutrislice"; // Add this class to apply the CSS
-    
+
 
         const header = document.createElement("header");
         header.className = "module-header";
@@ -70,7 +70,7 @@ Module.register("MMM-Nutrislice", {
         if (menu) {
             const dateElement = document.createElement("div");
             dateElement.className = "menu-date";
-            dateElement.innerHTML = `<strong>${menu.date}</strong>: ${menu.combinedMenu}`;
+            dateElement.innerHTML = `${menu.combinedMenu}`;
             wrapper.appendChild(dateElement);
         } else {
             const noMenuElement = document.createElement("div");
