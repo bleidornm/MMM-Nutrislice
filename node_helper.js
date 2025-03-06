@@ -24,7 +24,6 @@ module.exports = NodeHelper.create({
     },
 
     fetchData: function(url, callback) {
-        console.log("Fetching from URL:", url)
         https.get(url, (resp) => {
             let data = '';
 
@@ -57,12 +56,17 @@ module.exports = NodeHelper.create({
         const allDates = Array.from(new Set([...Object.keys(breakfastItems), ...Object.keys(lunchItems)]));
 
         allDates.forEach(date => {
-            const breakfast = breakfastItems[date] ? breakfastItems[date].join(", ") : "None";
+            const breakfast = breakfastItems[date] ? breakfastItems[date].map((item, index) => {
+                return index === 0 ? item : `<span style="font-size: smaller;">${item}</span>`;
+            }).join(", ") : "None";
+
             const lunch = lunchItems[date] ? lunchItems[date].join(", ") : "None";
+
+            const combinedMenuText = `<strong>Breakfast</strong>: ${breakfast}<br><strong>Lunch</strong>: ${lunch}`;
 
             combinedMenus.push({
                 date: date,
-                combinedMenu: `<strong>Breakfast</strong>: ${breakfast}, <strong>Lunch</strong>: ${lunch}`
+                combinedMenu: combinedMenuText
             });
         });
 
@@ -74,10 +78,10 @@ module.exports = NodeHelper.create({
 
         menuData.days.forEach(day => {
             const date = day.date;
-            const items = day.menu_items.
-				filter(item => item.food?.food_category == "entree").
-				map(item => item.food?.name).
-				filter(Boolean); // concise way to remove "falsy" values
+            const items = day.menu_items
+                .filter(item => item.food?.food_category === "entree")
+                .map(item => item.food?.name)
+                .filter(Boolean); // Remove "falsy" values
             parsedItems[date] = items;
         });
 
