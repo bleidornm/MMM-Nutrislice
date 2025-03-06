@@ -15,21 +15,23 @@ This API does not require a key. Accesses should be kept to a minimum period (da
 To use, add a block to `config.js` that looks like the following:
 
 ```javascript
-{
-    module: "MMM-Nutrislice",
-    position: "top_left",
-    config: {
-        district: "soudertonsd", // Your district here
-        schoolName: "salford-hills-elementary-school", // Your school name here
-        updateInterval: 3600000 // 1 hour
-    }
-}
+		{
+			module: "MMM-Nutrislice",
+			position: "top_left",
+			config: {
+				breakfastUrl: "https://norwood.nutrislice.com/menu/willett-early-childhood-center/elementary-breakfast-menu/2025-03-01",
+				lunchUrl: "https://norwood.nutrislice.com/menu/willett-early-childhood-center/elementary-in-school-menu/2025-03-01",
+				updateInterval: 3600000 // 1 hour
+			}
+		}
 ```
 
 ## Features to add
 
 - Move from a day with both breakfast and lunch in one line to split breakfast and lunch apart into two bullets under "Today's Menu"
-- Limit out to or highlight entries with `"food_category": "entree"` 
+  Done
+- Limit out to or highlight entries with `"food_category": "entree"`
+  Done
 - Configure multiple days or next n days of entry
 
 ## Bugs to fix
