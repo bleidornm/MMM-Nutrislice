@@ -1,8 +1,8 @@
 Module.register("MMM-Nutrislice", {
     // Default module config.
     defaults: {
-        district: "soudertonsd",
-        schoolName: "salford-hills-elementary-school",
+        breakfastUrl: "",
+        lunchUrl: "",
         updateInterval: 3600000, // 1 hour
     },
 
@@ -18,24 +18,23 @@ Module.register("MMM-Nutrislice", {
         return ["nutrislice.css"];
     },
 
-    getMenuData: function() {
+    getMenuData: function () {
         const today = new Date();
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
 
-        const breakfastUrl = this.buildUrl("breakfast", year, month, day);
-        const lunchUrl = this.buildUrl("lunch", year, month, day);
+        const breakfastUrl = this.buildApiUrl(this.config.breakfastUrl, year, month, day);
+        const lunchUrl = this.buildApiUrl(this.config.lunchUrl, year, month, day);
 
-        this.sendSocketNotification("GET_MENU_DATA", {
-            breakfastUrl: breakfastUrl,
-            lunchUrl: lunchUrl
-        });
+        this.sendSocketNotification("GET_MENU_DATA", { breakfastUrl, lunchUrl });
     },
 
-    buildUrl: function(menuType, year, month, day) {
-        const district = this.config.district;
-        const schoolName = this.config.schoolName;
+    buildApiUrl: function(menuUrl, year, month, day) {
+        const urlParts = menuUrl.split('/');
+        const district = urlParts[2].split('.')[0];
+        const schoolName = urlParts[4];
+        const menuType = urlParts[5];
 
         return `https://${district}.api.nutrislice.com/menu/api/weeks/school/${schoolName}/menu-type/${menuType}/${year}/${month}/${day}/`;
     },
@@ -50,7 +49,6 @@ Module.register("MMM-Nutrislice", {
     getDom: function() {
         const wrapper = document.createElement("div");
         wrapper.className = "MMM-Nutrislice"; // Add this class to apply the CSS
-
 
         const header = document.createElement("header");
         header.className = "module-header";
